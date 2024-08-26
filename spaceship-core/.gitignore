@@ -16,3 +16,5 @@ out/
 examples/example-project/activate
 examples/example-project/pinned.txt
 .DS_Store
+.eclipse-pmd
+.gitignore
