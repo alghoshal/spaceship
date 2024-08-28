@@ -29,7 +29,7 @@ All the game endpoints are accessible via REST Api's.
 	& so on for the 3rd, 4th...Nth player's instances. 
 	Just remember to assign unique server.port, management.port and instance_id values to each player
 
-## Alternative use Docker builds
+## Alternative: Build and Run using Docker
 Download spaceship repo
 
 ### Build spaceship-registry docker
