@@ -30,21 +30,22 @@ All the game endpoints are accessible via REST Api's.
 	Just remember to assign unique server.port, management.port and instance_id values to each player
 
 ## Alternative: Build and Run using Docker
-Download spaceship repo
+	Download spaceship repo
 
-### Build spaceship-registry docker
-docker build -t spaceship-registry -f DockerfileSpaceshipRegistry .
+	### Build spaceship-registry docker
+	docker build -t spaceship-registry -f DockerfileSpaceshipRegistry .
 
-### Start spaceship-registry instance
-docker run --name spaceregistry -dp 8761:8761 --rm -it spaceship-registry:latest
+	### Start spaceship-registry instance
+	docker run --name spaceregistry -dp 8761:8761 --rm -it spaceship-registry:latest
+	
+	### Build spaceship-user docker
+	docker build -t spaceship-user -f DockerfileSpaceshipUser .
+	
+	### Start 1st spaceship-user instance on server_port 8000
+	docker run --name spaceuser1 -dp 8000:8000 -e server_port=8000 -e instance_id=user1 -e management_port=8001 --rm -it spaceship-user:latest
 
-### Build spaceship-user docker
-docker build -t spaceship-user -f DockerfileSpaceshipUser .
-### Start 1st spaceship-user instance on server_port 8000
-docker run --name spaceuser1 -dp 8000:8000 -e server_port=8000 -e instance_id=user1 -e management_port=8001 --rm -it spaceship-user:latest
-
-### Start 2nd spaceship-user instance on server_port 9000 
-docker run --name spaceuser2 -dp 9000:9000 -e server_port=9000 -e instance_id=user2 -e management_port=9001 --rm -it spaceship-user-1:latest
+	### Start 2nd spaceship-user instance on server_port 9000 
+	docker run --name spaceuser2 -dp 9000:9000 -e server_port=9000 -e instance_id=user2 -e management_port=9001 --rm -it spaceship-user-1:latest
 
 ## Various Service Endpoints
 
