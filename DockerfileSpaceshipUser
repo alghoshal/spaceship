@@ -1,0 +1,37 @@
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+## Build spaceship-core
+FROM maven:3-ibmjava-8 as build
+
+COPY spaceship-core /home/app/spaceship-core
+RUN mvn -f /home/app/spaceship-core/pom.xml clean install
+
+## Build spaceship-user
+FROM maven:3-ibmjava-8 as build-user
+# M2 dependencies
+COPY --from=build /root/.m2 /root/.m2
+COPY spaceship-user /home/app/spaceship-user
+RUN mvn -f /home/app/spaceship-user/pom.xml clean package -Dmaven.test.skip=true
+
+## Package & Run
+FROM maven:3-ibmjava-8
+COPY --from=build-user /home/app/spaceship-user/target/spaceship-user-0.0.1-SNAPSHOT.jar /usr/local/lib/spaceship-user.jar
+ENV server_port=9000 
+ENV instance_id=challenger 
+ENV management_port=9001
+
+EXPOSE ${server_port}
+#ENTRYPOINT [ "java", "-jar" "-Dserver.port=${server_port}", "-Dspring.application.instance_id=${instance_id}", "-Dmanagement.port=${management_port}", "/usr/local/lib/spaceship-user.jar" ]
+ENTRYPOINT java -jar -Dserver.port=${server_port} -Dspring.application.instance_id=${instance_id} -Dmanagement.port=${management_port} /usr/local/lib/spaceship-user.jar
